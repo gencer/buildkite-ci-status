@@ -1,0 +1,90 @@
+{
+    "name": "buildkite-ci-status",
+    "displayName": "Buildkite CI Status",
+    "description": "Monitor project's Buildkite CI status from Visual Studio Code.",
+    "version": "1.0.0",
+    "publisher": "gencer",
+    "author": {
+        "name": "Gencer W. Genç"
+    },
+    "contributors": [
+        {
+            "name": "Kemal Sokolovic",
+            "email": "kemal.sokolovic@gmail.com",
+            "url": "http://www.devfort.org"
+        }
+    ],
+    "engines": {
+        "vscode": "^1.18.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "buildkite",
+        "buildkite ci"
+    ],
+    "activationEvents": [
+        "onCommand: buildkite.updateStatus",
+        "onCommand: buildkite.viewInBuildkite",
+        "*"
+    ],
+    "main": "./out/extension",
+    "icon": "images/logo.png",
+    "license": "MIT",
+    "homepage": "https://github.com/gencer/buildkite-ci-status",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gencer/buildkite-ci-status.git"
+    },
+    "bugs": {
+        "url": "https://github.com/gencer/buildkite-ci-status/issues"
+    },
+    "contributes": {
+        "commands": [
+            {
+                "command": "buildkite.updateStatus",
+                "title": "Buildkite: Update Status"
+            },
+            {
+                "command": "buildkite.viewInBuildkite",
+                "title": "Buildkite: View Branch in Buildkite"
+            }
+        ],
+        "configuration": [
+            {
+                "type": "object",
+                "title": "Buildkite Status Configuration",
+                "properties": {
+                    "buildkite.pollInterval": {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Defines an interval in minutes for automatic Buildkite status update. 0 means no automatic update."
+                    }
+                }
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "dependencies": {
+        "@akanass/rx-http-request": "^3.1.0",
+        "@types/es6-promise": "^3.3.0",
+        "open": "0.0.5",
+        "read-yaml": "^1.1.0",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.2",
+        "request-promise-native": "^1.0.5",
+        "rxjs": "^6.3.3"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
