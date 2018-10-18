@@ -54,6 +54,7 @@ class BuildkiteStatus {
     public updateIndicator() {
         if (!this._indicator) {
             this._indicator = window.createStatusBarItem(StatusBarAlignment.Left);
+            this._indicator.command = 'buildkite.viewInBuildkite';
         }
 
         var options = {
@@ -91,10 +92,10 @@ class BuildkiteStatus {
                 this._indicator.text = "$(check) Buildkite: Build Passed (#" + id + ")";
                 break;
             case "running":
-                this._indicator.text = "$(check) Buildkite: Build Running (#" + id + ")";
+                this._indicator.text = "$(zap) Buildkite: Build Running (#" + id + ")";
                 break;
             case "scheduled":
-                this._indicator.text = "$(check) Buildkite: Build Scheduled (#" + id + ")";
+                this._indicator.text = "$(clock) Buildkite: Build Scheduled (#" + id + ")";
                 break;
             case "failed":
                 this._indicator.text = "$(x) Buildkite: Build Failed (#" + id + ")";

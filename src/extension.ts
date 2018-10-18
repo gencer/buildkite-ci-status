@@ -30,9 +30,14 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(openInBuildkiteDisp);
 
     const pollInterval: number = vscode.workspace.getConfiguration("buildkiteci").get("pollInterval", 0);
+    
+    let interval = 20000;
+
     if (pollInterval > 0) {
-        setInterval(updateBuildkiteStatus, pollInterval * 60000);
+        interval = pollInterval * 60000;
     }
+
+    setInterval(updateBuildkiteStatus, interval);
 
     function initBuildkiteStatus(aContext: vscode.ExtensionContext, settings: any) {
         // Read settings from the configuration file
@@ -54,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
         } 
 
         if (!silent) {
-            vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci.yml not found.");
+            vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci-status.yml not found.");
         }
     };
 
@@ -62,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (!!settings) {
             buildkiteController.openWeb();
         } else {
-            vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci.yml not found.");            
+            vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci-status.yml not found.");            
         }
     }
 }
@@ -81,9 +86,9 @@ function isConfigured(): any {
 
     let exists: any = false;
     for (const workspaceItem of vscode.workspace.workspaceFolders) {
-        exists = fs.existsSync(path.join(workspaceItem.uri.fsPath, ".buildkite-ci.yml"));
+        exists = fs.existsSync(path.join(workspaceItem.uri.fsPath, ".buildkite-ci-status.yml"));
         if (exists) {
-            return readYaml.sync(path.join(workspaceItem.uri.fsPath, ".buildkite-ci.yml"));
+            return readYaml.sync(path.join(workspaceItem.uri.fsPath, ".buildkite-ci-status.yml"));
         }
     }
 
