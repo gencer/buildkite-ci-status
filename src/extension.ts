@@ -37,7 +37,9 @@ export function activate(context: vscode.ExtensionContext) {
         interval = pollInterval * 60000;
     }
 
-    setInterval(updateBuildkiteStatus, interval);
+    if (settings) {
+        setInterval(updateBuildkiteStatus, interval);
+    }
 
     function initBuildkiteStatus(aContext: vscode.ExtensionContext, settings: any) {
         // Read settings from the configuration file

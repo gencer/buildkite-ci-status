@@ -1,3 +1,7 @@
+# Version 1.1.1
+
++ Fixed multiple notifications (loop) when status file doesn't exists.
+
 # Version 1.1.0
 
 + Changed YML filename to .buildkite-ci-status.yml Reflect your changes.
