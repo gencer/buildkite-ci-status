@@ -2,7 +2,7 @@
     "name": "buildkite-ci-status",
     "displayName": "Buildkite CI Status",
     "description": "Monitor project's Buildkite CI/CD status from Visual Studio Code.",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "publisher": "gencer",
     "author": {
         "name": "Gencer W. Genç"

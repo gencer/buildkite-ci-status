@@ -1,3 +1,7 @@
+# Version 1.1.2
+
+* Security release
+
 # Version 1.1.1
 
 + Fixed multiple notifications (loop) when status file doesn't exists.
