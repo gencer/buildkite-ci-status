@@ -1,7 +1,7 @@
 # Version 1.3.0
 
 + Added "Show latest build result" in VSCode tab.
-* Fixed inproper naming in commands
+* Fixed improper naming in commands
 
 # Version 1.1.2
 
