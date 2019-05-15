@@ -26,6 +26,7 @@ The extension contributes the following commands to your Visual Studio Code:
 
 * **Buildkite: Update Status**: Manually refresh the build status of the specified branch.
 * **Buildkite: View Branch in Buildkite**: Open the specified branch in the Buildkite CI web page.
+* **Buildkite: Show latest build result**: Show latest build result in Visual Studio Code tab-window without leaving your IDE.
 
 ### Status Bar
 
@@ -59,7 +60,7 @@ In case you run into any issues while using the extension or have a suggestion o
 
 ## Roadmap
 
-- [ ] Ability to fetch build log inside VSCode output or debug console (or maybe in a popup window)
+- [x] Ability to fetch build log inside VSCode output or debug console (or maybe in a popup window)
 - [ ] Ability to cancel or retry build inside VSCode.
 - [ ] Ability to watch specific branches
 
