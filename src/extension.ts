@@ -16,6 +16,19 @@ export function activate(context: vscode.ExtensionContext) {
         initBuildkiteStatus(context, settings);
     }
 
+    vscode.commands.registerCommand('buildkiteResult.start', () => {
+        // Create and show panel
+        const panel = vscode.window.createWebviewPanel(
+            'buildkiteResult',
+            'Build Result',
+            vscode.ViewColumn.One,
+            {}
+        );
+
+        // And set its HTML content
+        buildkiteController.openResult(panel);
+    });
+
     context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(e => {
         settings = isConfigured();
         if (settings) {
@@ -30,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(openInBuildkiteDisp);
 
     const pollInterval: number = vscode.workspace.getConfiguration("buildkiteci").get("pollInterval", 0);
-    
+
     let interval = 20000;
 
     if (pollInterval > 0) {
@@ -58,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (!!settings) {
             buildkiteController.update();
             return;
-        } 
+        }
 
         if (!silent) {
             vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci-status.yml not found.");
@@ -69,7 +82,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (!!settings) {
             buildkiteController.openWeb();
         } else {
-            vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci-status.yml not found.");            
+            vscode.window.showErrorMessage("The Buildkite configuration file .buildkite-ci-status.yml not found.");
         }
     }
 }

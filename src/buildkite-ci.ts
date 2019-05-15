@@ -3,7 +3,9 @@
 import { window, Disposable, StatusBarItem, StatusBarAlignment } from 'vscode';
 
 import * as open from 'open';
-import {RxHR} from '@akanass/rx-http-request';
+import { RxHR } from '@akanass/rx-http-request';
+import * as request from "request-promise-native";
+var emoji = require('node-emoji')
 
 export class BuildkiteStatusController {
     private _buildkite: BuildkiteStatus;
@@ -31,6 +33,10 @@ export class BuildkiteStatusController {
 
     openWeb() {
         this._buildkite.openWeb();
+    }
+
+    async openResult(panel: any) {
+        return this._buildkite.openResult(panel);
     }
 
     private _onEvent() {
@@ -84,6 +90,78 @@ class BuildkiteStatus {
 
     public openWeb() {
         open(this._webUrl);
+    }
+
+
+    public async openResult(panel: any) {
+
+        var options = {
+            headers: {
+                'Authorization': 'Bearer ' + this._token
+            },
+            json: true
+        };
+
+        const onMissing = (name)  => {
+            return ":" + name + ":";
+        };
+
+        RxHR.get('https://api.buildkite.com/v2/organizations/' + this._organization + '/pipelines/' + this._project + '/builds', options).subscribe(
+            async (data) => {
+                if (data.response.statusCode === 200) {
+                    this._setSuccessfulIndicatorText(data.body[0].number, data.body[0].state);
+                    // this._webUrl = data.body[0].web_url;
+
+                    let jobs: string = ''
+
+                    for (let job of data.body[0].jobs) {
+                        if ( job.name === undefined ) { continue }
+                        const title = emoji.emojify(job.name, onMissing);
+                        jobs += `<div class="job">${title}</div><br>`
+
+                        const baseUrl = 'https://api.buildkite.com/v2/organizations/' + this._organization + '/pipelines/' + 
+                                this._project + '/builds/' + data.body[0].number + '/jobs/' + job.id + '/log';
+                        const queryString = '';
+                        var options = {
+                            uri: baseUrl + queryString,
+                            headers: {
+                                'Authorization': 'Bearer ' + this._token,
+                                'Accept': 'text/html',
+                            }
+                        };
+                        let result = await request.get(options);
+                        jobs += `<div class="result"><code>${result.replace(/\n/gm, "<br>")}</code></div>`
+                        jobs += '<br>'
+                    }
+
+                    panel.webview.html = `<!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Build Result</title>
+                            <style>
+                                .job { 
+                                    padding: 9px;
+                                    width: 100%;
+                                    color: #fff;
+                                    font-size: 15px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            ${jobs}
+                        </body>
+                        </html>`;
+
+                } else {
+                    this._setUnsuccessfulIndicatorText(data.response.statusCode)
+                }
+            },
+            (err) => {
+                this._setUnsuccessfulIndicatorText(400);
+            }
+        );
     }
 
     private _setSuccessfulIndicatorText(id: number, buildStatus: string) {
